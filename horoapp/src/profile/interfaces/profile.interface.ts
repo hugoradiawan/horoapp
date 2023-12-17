@@ -6,8 +6,8 @@ export interface Profile {
   readonly horoscope?: string;
   readonly zodiac?: string;
   readonly birthday?: string;
-  readonly height?: number;
-  readonly weight?: number;
+  readonly heightInCm?: number;
+  readonly weightInKg?: number;
   readonly interests?: string[];
 }
 

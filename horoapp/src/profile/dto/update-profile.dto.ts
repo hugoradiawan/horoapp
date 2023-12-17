@@ -11,11 +11,11 @@ export class UpdateProfileDto {
 
   @IsOptional()
   @IsNumber()
-  readonly height?: string;
+  readonly heightInCm?: string;
 
   @IsOptional()
   @IsNumber()
-  readonly weight?: number;
+  readonly weightInKg?: number;
 
   @IsOptional()
   @IsArray()

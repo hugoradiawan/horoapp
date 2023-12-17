@@ -6,9 +6,9 @@ export class CreateProfileDto {
   @IsString()
   readonly birthday?: string;
   @IsNumber()
-  readonly height?: number;
+  readonly heightInCm?: number;
   @IsNumber()
-  readonly weight?: number;
+  readonly weightInKg?: number;
   @IsArray()
   @IsString({ each: true })
   @IsOptional()

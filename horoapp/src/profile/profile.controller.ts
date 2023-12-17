@@ -110,17 +110,23 @@ export class ProfileController {
   }
 
   private sanitizeData(data: ProfileDocument): Profile {
-    const { name, birthday, height, weight, interests } = data;
-    return { name, birthday, height, weight, interests };
-  }
-
-  @Put('getHoroscope')
-  async getHoroscope(@Body('dob') dob: string): Promise<string> {
-    return await this.profileService.getHoroscope(dob);
-  }
-
-  @Put('getZodiac')
-  async getZodiac(@Body('dob') dob: string): Promise<string | undefined> {
-    return await this.profileService.getZodiac(dob);
+    const {
+      name,
+      birthday,
+      heightInCm,
+      weightInKg,
+      interests,
+      zodiac,
+      horoscope,
+    } = data;
+    return {
+      name,
+      birthday,
+      heightInCm,
+      weightInKg,
+      interests,
+      zodiac,
+      horoscope,
+    };
   }
 }
