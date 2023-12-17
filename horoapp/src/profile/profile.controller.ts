@@ -109,12 +109,53 @@ export class ProfileController {
     return res.status(isOk ? 200 : 400).send();
   }
 
+  @Post('askHoroscopeZodiac')
+  async askHoroscopeZodiac(
+    @Res() res: Response,
+    @Body() body: { birthday: string },
+  ): Promise<Response> {
+    if (!body.birthday) {
+      return res.status(400).json({
+        isOk: false,
+        errorCode: 1004,
+        message: 'Birthday is required',
+      });
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.exec(body.birthday)) {
+      return res.status(400).json({
+        isOk: false,
+        errorCode: 1005,
+        message: 'Birthday is not in the format of YYYY-MM-DD',
+      });
+    }
+    const [horoscope, zodiac] = await Promise.all([
+      this.profileService.getHoroscope(body.birthday),
+      this.profileService.getZodiac(body.birthday),
+    ]);
+    if (!horoscope || !zodiac) {
+      return res.status(500).json({
+        isOk: false,
+        errorCode: 1006,
+        message: 'Failed to get horoscope and zodiac',
+      });
+    }
+    const response: ServerResponse<{ horoscope: string; zodiac: string }> = {
+      isOk: true,
+      data: {
+        horoscope,
+        zodiac,
+      },
+    };
+    return res.status(200).json(response);
+  }
+
   private sanitizeData(data: ProfileDocument): Profile {
     const {
       name,
       birthday,
       heightInCm,
       weightInKg,
+      gender,
       interests,
       zodiac,
       horoscope,
@@ -124,6 +165,7 @@ export class ProfileController {
       birthday,
       heightInCm,
       weightInKg,
+      gender,
       interests,
       zodiac,
       horoscope,

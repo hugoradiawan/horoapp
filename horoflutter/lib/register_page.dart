@@ -36,6 +36,12 @@ class RegisterPage extends GetView<LoginRegisterController> {
               horizontal: 12,
             ),
             child: TextField(
+              onChanged: (value) {
+                controller.createUserDto.update((val) {
+                  if (val == null) return;
+                  val.email = value;
+                });
+              },
               style: const TextStyle(
                 color: Colors.white,
               ),
@@ -50,6 +56,12 @@ class RegisterPage extends GetView<LoginRegisterController> {
               horizontal: 12,
             ),
             child: TextField(
+              onChanged: (value) {
+                controller.createUserDto.update((val) {
+                  if (val == null) return;
+                  val.username = value;
+                });
+              },
               style: const TextStyle(
                 color: Colors.white,
               ),
@@ -65,6 +77,13 @@ class RegisterPage extends GetView<LoginRegisterController> {
             ),
             child: Obx(
               () => TextField(
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  controller.createUserDto.update((val) {
+                    if (val == null) return;
+                    val.password = value;
+                  });
+                },
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -89,6 +108,10 @@ class RegisterPage extends GetView<LoginRegisterController> {
             ),
             child: Obx(
               () => TextField(
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  controller.confirmPassword.value = value;
+                },
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -113,7 +136,7 @@ class RegisterPage extends GetView<LoginRegisterController> {
             ),
             child: GlowButton(
               text: 'Register',
-              onPressed: () => print('Register'),
+              onPressed: () => controller.register(),
             ),
           ),
           const Gap(30),

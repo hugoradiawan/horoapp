@@ -5,6 +5,8 @@ export class CreateProfileDto {
   readonly name?: string;
   @IsString()
   readonly birthday?: string;
+  @IsString()
+  readonly gender?: string;
   @IsNumber()
   readonly heightInCm?: number;
   @IsNumber()

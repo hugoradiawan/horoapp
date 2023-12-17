@@ -12,12 +12,19 @@ class LoginRegisterPage extends GetView<LoginRegisterController> {
   Widget build(_) => Background(
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          body: PageView(
-            controller: controller.pg,
-            children: const [
-              LoginPage(),
-              RegisterPage(),
-            ],
+          body: SingleChildScrollView(
+            child: SizedBox(
+              height: Get.height,
+              width: Get.width,
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: controller.pg,
+                children: const [
+                  LoginPage(),
+                  RegisterPage(),
+                ],
+              ),
+            ),
           ),
         ),
       );

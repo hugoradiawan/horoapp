@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:horoflutter/login_or_register_page.dart';
 import 'package:horoflutter/login_register_binding.dart';
-import 'package:horoflutter/profile_page.dart';
 
 class HoroApp extends StatelessWidget {
   const HoroApp({super.key});
@@ -34,7 +33,6 @@ class HoroApp extends StatelessWidget {
           binding: LoginRegisterBinding(),
         ),
       ],
-      home: const ProfilePage(),
     );
   }
 }
