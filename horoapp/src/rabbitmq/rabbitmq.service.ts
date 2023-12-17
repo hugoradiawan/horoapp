@@ -1,10 +1,11 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import * as amqp from 'amqplib';
+import { Connection, Channel, connect, ConsumeMessage } from 'amqplib';
+import { CreateChatMessageDto } from 'src/chat/dto/create-chat-message.dto';
 
 @Injectable()
 export class RabbitMQService implements OnModuleInit {
-  private connection?: amqp.Connection;
-  private channel?: amqp.Channel;
+  private connection?: Connection;
+  private channel?: Channel;
   private readonly url = 'amqp://localhost';
 
   async onModuleInit() {
@@ -12,23 +13,23 @@ export class RabbitMQService implements OnModuleInit {
   }
 
   async connect() {
-    this.connection = await amqp.connect(this.url);
+    this.connection = await connect(this.url);
     this.channel = await this.connection.createChannel();
     const queue = 'rpc_queue';
-    await channel.assertQueue(queue, { durable: false });
+    await this.channel?.assertQueue(queue, { durable: false });
   }
 
-  async sendToQueue(queue: string, message: string) {
+  async sendToQueue(createChatMessageDto: CreateChatMessageDto) {
     if (!this.channel) {
       await this.connect();
     }
-    return this.channel?.sendToQueue(queue, Buffer.from(message));
+    return this.channel?.sendToQueue(
+      createChatMessageDto.queue,
+      Buffer.from(createChatMessageDto.message),
+    );
   }
 
-  async consume(
-    queue: string,
-    callback: (msg: amqp.ConsumeMessage | null) => void,
-  ) {
+  async consume(queue: string, callback: (msg: ConsumeMessage | null) => void) {
     if (!this.channel) {
       await this.connect();
     }

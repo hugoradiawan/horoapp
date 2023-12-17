@@ -1,16 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { RabbitMQService } from 'src/rabbitmq/rabbitmq.service';
+import { CreateChatMessageDto } from './dto/create-chat-message.dto';
 
 @Injectable()
-export class ChatService {
+export class ChatService implements OnModuleInit {
   constructor(private readonly rabbitMQService: RabbitMQService) {}
 
-  async sendMessage(queue: string, message: string): Promise<void> {
-    await this.rabbitMQService.send(queue, message);
+  onModuleInit() {
+    this.rabbitMQService.connect();
   }
 
-  async receiveMessage(queue: string): Promise<string> {
-    const message = await this.rabbitMQService.receive(queue);
-    return message;
+  async sendMessage(createChatMessageDto: CreateChatMessageDto): Promise<void> {
+    await this.rabbitMQService.sendToQueue(createChatMessageDto);
+  }
+
+  async receiveMessage(queue: string): Promise<boolean> {
+    const message = await this.rabbitMQService.consume(queue, async (msg) => {
+      console.log('Message received: ', msg?.content.toString());
+    });
+    console.log('Message: ', message);
+    return true;
   }
 }
