@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:horoflutter/login_or_register_page.dart';
-import 'package:horoflutter/login_register_binding.dart';
+import 'package:horoflutter/uis/login_or_register_page.dart';
+import 'package:horoflutter/ui_loc/login_register_binding.dart';
 
 class HoroApp extends StatelessWidget {
   const HoroApp({super.key});

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:horoflutter/login_register_controller.dart';
+import 'package:horoflutter/ui_loc/login_register_controller.dart';
 
 class LoginRegisterBinding extends Bindings {
   @override

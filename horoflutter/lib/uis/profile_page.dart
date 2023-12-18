@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:horoflutter/background.dart';
-import 'package:horoflutter/expand_tile.dart';
-import 'package:horoflutter/interest_tile.dart';
+import 'package:horoflutter/uis/background.dart';
+import 'package:horoflutter/uis/expand_tile.dart';
+import 'package:horoflutter/uis/interest_tile.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

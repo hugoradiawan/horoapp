@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:horoflutter/background.dart';
+import 'package:horoflutter/uis/background.dart';
 
 class InterestPage extends StatelessWidget {
   const InterestPage({super.key});

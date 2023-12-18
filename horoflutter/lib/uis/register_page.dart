@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:horoflutter/extensions.dart';
-import 'package:horoflutter/glow_button.dart';
-import 'package:horoflutter/login_register_controller.dart';
+import 'package:horoflutter/uis/glow_button.dart';
+import 'package:horoflutter/ui_loc/login_register_controller.dart';
 
 class RegisterPage extends GetView<LoginRegisterController> {
   const RegisterPage({super.key});

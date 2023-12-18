@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:horoflutter/interest_page.dart';
+import 'package:horoflutter/uis/interest_page.dart';
 
 class InterestTile extends StatelessWidget {
   const InterestTile({

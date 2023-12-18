@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:horoflutter/create_user_dto.dart';
-import 'package:horoflutter/login_user_dto.dart';
-import 'package:horoflutter/nestjs_connect.dart';
+import 'package:horoflutter/business_loc/create_user_dto.dart';
+import 'package:horoflutter/business_loc/login_user_dto.dart';
+import 'package:horoflutter/business_loc/nestjs_connect.dart';
 
 class LoginRegisterController extends GetxController {
   final RxBool isLogin = true.obs, isObscure = true.obs;

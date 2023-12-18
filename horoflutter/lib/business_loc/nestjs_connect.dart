@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:horoflutter/create_user_dto.dart';
-import 'package:horoflutter/login_user_dto.dart';
-import 'package:horoflutter/server_response.dart';
+import 'package:horoflutter/business_loc/create_user_dto.dart';
+import 'package:horoflutter/business_loc/login_user_dto.dart';
+import 'package:horoflutter/business_loc/server_response.dart';
 
 class NestJsConnect extends GetConnect {
   @override
