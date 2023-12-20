@@ -1,22 +1,27 @@
-import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class UpdateProfileDto {
   @IsOptional()
   @IsString()
   readonly name?: string;
-
   @IsOptional()
   @IsString()
   readonly birthday?: string;
-
+  @IsOptional()
+  @IsBoolean()
+  readonly gender?: boolean;
   @IsOptional()
   @IsNumber()
   readonly heightInCm?: string;
-
   @IsOptional()
   @IsNumber()
   readonly weightInKg?: number;
-
   @IsOptional()
   @IsArray()
   readonly interest?: string[];

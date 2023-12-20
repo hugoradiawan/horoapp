@@ -1,4 +1,4 @@
-import { Controller, Post, Body, ValidationPipe, Res } from '@nestjs/common';
+import { Controller, Post, Body, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from 'src/user/dto/login-user.dto';
 import { Response } from 'express';
@@ -19,7 +19,7 @@ export class AuthController {
   @Post('login')
   async login(
     @Res() res: Response,
-    @Body(ValidationPipe) loginUserDto: LoginUserDto,
+    @Body() loginUserDto: LoginUserDto,
   ): Promise<Response> {
     const jwt = await this.authService.login(loginUserDto);
     return res.status(!jwt ? 401 : 200).json({
@@ -33,7 +33,7 @@ export class AuthController {
   @Post('register')
   async register(
     @Res() res: Response,
-    @Body(ValidationPipe) createUserDto: CreateUserDto,
+    @Body() createUserDto: CreateUserDto,
   ): Promise<Response> {
     const users = await Promise.all([
       this.userService.findOneByEmail(createUserDto.email),

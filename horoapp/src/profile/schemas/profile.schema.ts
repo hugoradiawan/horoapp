@@ -4,7 +4,7 @@ export const ProfileSchema = new Schema({
   userId: String,
   name: String,
   birthday: String,
-  gender: String,
+  gender: Boolean,
   heightInCm: Number,
   weightInKg: Number,
   horoscope: String,

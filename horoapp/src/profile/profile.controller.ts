@@ -5,7 +5,6 @@ import {
   Get,
   Put,
   Res,
-  ValidationPipe,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -83,10 +82,11 @@ export class ProfileController {
   async update(
     @Req() req: AuthRequest,
     @Res() res: Response,
-    @Body(ValidationPipe) updateProfileDto: UpdateProfileDto,
+    @Body() updateProfileDto: UpdateProfileDto,
   ): Promise<Response> {
     const jwtPayload = req.payload;
     let toupdate: UpdateProfileDto & HoroscopeZodiac = updateProfileDto;
+    if (Object.keys(toupdate).length === 0) return res.status(200).send();
     if (updateProfileDto.birthday) {
       if (!/^\d{4}-\d{2}-\d{2}$/.exec(updateProfileDto.birthday)) {
         return res.status(400).json({

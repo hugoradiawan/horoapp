@@ -1,38 +1,48 @@
-class Profile {
-  final String username;
-  final String? horoscope, imageUrl, birthday, gender, displayName;
-  final double? height, weight;
+import 'package:horoflutter/business_loc/server_response.dart';
+
+class Profile extends Jsonable {
+  String? username, horoscope, zodiac, imageUrl, birthday, displayName;
+  int? height, weight;
+  bool? gender;
 
   Profile({
-    required this.username,
+    this.username,
     this.horoscope,
     this.imageUrl,
     this.birthday,
     this.displayName,
+    this.zodiac,
     this.gender,
     this.height,
     this.weight,
   });
 
-  Map<String, dynamic> toJson() => {
-        'username': username,
-        'horoscope': horoscope,
-        'imageUrl': imageUrl,
-        'birthday': birthday,
-        'displayName': displayName,
-        'gender': gender,
-        'height': height,
-        'weight': weight,
+  @override
+  Map<String, dynamic> toJson({bool withUsername = true}) => {
+        if (withUsername && username != null) 'username': username,
+        if (horoscope != null) 'horoscope': horoscope,
+        if (zodiac != null) 'zodiac': zodiac,
+        if (imageUrl != null) 'imageUrl': imageUrl,
+        if (birthday != null) 'birthday': birthday,
+        if (displayName != null) 'name': displayName,
+        if (gender != null) 'gender': gender,
+        if (height != null) 'heightInCm': height,
+        if (weight != null) 'weightInKg': weight,
       };
 
-  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        username: json['username'],
-        horoscope: json['horoscope'],
-        imageUrl: json['imageUrl'],
-        birthday: json['birthday'],
-        displayName: json['displayName'],
-        gender: json['gender'],
-        height: json['height'],
-        weight: json['weight'],
-      );
+  @override
+  Profile? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
+    return Profile(
+      username: json['username'],
+      horoscope: json['horoscope'],
+      zodiac: json['zodiac'],
+      imageUrl: json['imageUrl'],
+      birthday: json['birthday'],
+      displayName: json['name'],
+      gender: json['gender'],
+      height: int.tryParse(json['heightInCm'].toString()),
+      weight: int.tryParse(json['weightInKg'].toString()),
+    );
+  }
 }

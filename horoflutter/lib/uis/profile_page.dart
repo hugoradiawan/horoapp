@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:horoflutter/business_loc/auth_controller.dart';
 import 'package:horoflutter/uis/background.dart';
-import 'package:horoflutter/uis/expand_tile.dart';
+import 'package:horoflutter/uis/about_tile.dart';
 import 'package:horoflutter/uis/interest_tile.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -14,9 +16,12 @@ class ProfilePage extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             backgroundColor: Colors.transparent,
-            title: const Text(
-              '@johndoe123',
-              style: TextStyle(color: Colors.white),
+            title: InkWell(
+              onTap: () => Get.find<AuthController>().erase(),
+              child: const Text(
+                '@johndoe123',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
           body: ListView(
@@ -46,132 +51,7 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
               const Gap(20),
-              ExpandTile(
-                title: 'About',
-                subtitle:
-                    "Add in your profile details to help others know you better",
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      children: [
-                        FloatingActionButton(
-                          elevation: 0,
-                          backgroundColor: Colors.white.withOpacity(0.1),
-                          onPressed: () {},
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const Gap(20),
-                        const Text(
-                          "Add Image",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: Text(
-                              "Display Name:",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                        Expanded(flex: 3, child: TextField()),
-                      ],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: Text(
-                              "Gender:",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                        Expanded(flex: 3, child: TextField()),
-                      ],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: Text(
-                              "Birthday:",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                        Expanded(flex: 3, child: TextField()),
-                      ],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: Text(
-                              "Horoscope:",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                        Expanded(flex: 3, child: TextField()),
-                      ],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: Text(
-                              "Zodiac:",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                        Expanded(flex: 3, child: TextField()),
-                      ],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: Text(
-                              "Height:",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                        Expanded(flex: 3, child: TextField()),
-                      ],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: Text(
-                              "Weight:",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                        Expanded(flex: 3, child: TextField()),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              const AboutTile(),
               const Gap(20),
               const InterestTile(),
             ],

@@ -5,7 +5,7 @@ import 'package:horoflutter/uis/login_page.dart';
 import 'package:horoflutter/ui_loc/login_register_controller.dart';
 import 'package:horoflutter/uis/register_page.dart';
 
-class LoginRegisterPage extends GetView<LoginRegisterController> {
+class LoginRegisterPage extends GetView {
   const LoginRegisterPage({super.key});
 
   @override
@@ -16,13 +16,16 @@ class LoginRegisterPage extends GetView<LoginRegisterController> {
             child: SizedBox(
               height: Get.height,
               width: Get.width,
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: controller.pg,
-                children: const [
-                  LoginPage(),
-                  RegisterPage(),
-                ],
+              child: GetBuilder<LoginRegisterController>(
+                init: LoginRegisterController(),
+                builder: (lrc) => PageView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: lrc.pg,
+                    children: const [
+                      LoginPage(),
+                      RegisterPage(),
+                    ],
+                  )
               ),
             ),
           ),

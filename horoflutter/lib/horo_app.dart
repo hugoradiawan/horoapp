@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:horoflutter/business_loc/auth_controller.dart';
+import 'package:horoflutter/ui_loc/main_binding.dart';
 import 'package:horoflutter/uis/login_or_register_page.dart';
-import 'package:horoflutter/ui_loc/login_register_binding.dart';
+import 'package:horoflutter/uis/profile_page.dart';
 
 class HoroApp extends StatelessWidget {
   const HoroApp({super.key});
@@ -24,15 +26,27 @@ class HoroApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      initialRoute: '/',
-      initialBinding: LoginRegisterBinding(),
-      getPages: [
-        GetPage(
-          name: '/',
-          page: () => const LoginRegisterPage(),
-          binding: LoginRegisterBinding(),
-        ),
-      ],
+      initialBinding: Mainbinding(),
+      home: const UserSwitcher(),
     );
   }
+}
+
+class UserSwitcher extends GetView<AuthController> {
+  const UserSwitcher({super.key});
+
+  @override
+  Widget build(_) => Obx(
+        () => Navigator(
+          pages: [
+            if (controller.accessToken.value == null)
+              const MaterialPage(child: LoginRegisterPage())
+            else if (controller.profile.value == null)
+              const MaterialPage(child: ProfilePage())
+            else
+              const MaterialPage(child: ProfilePage())
+          ],
+          onPopPage: (route, result) => route.didPop(result),
+        ),
+      );
 }
