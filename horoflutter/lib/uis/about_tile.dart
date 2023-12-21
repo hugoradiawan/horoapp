@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:horoflutter/business_loc/auth_controller.dart';
+import 'package:horoflutter/business_loc/file_upload_controller.dart';
 import 'package:horoflutter/business_loc/nestjs_connect.dart';
 import 'package:horoflutter/business_loc/profile.dart';
 import 'package:horoflutter/extensions.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class AboutTile extends StatelessWidget {
@@ -70,7 +72,18 @@ class AboutTile extends StatelessWidget {
                         FloatingActionButton(
                           elevation: 0,
                           backgroundColor: Colors.white.withOpacity(0.1),
-                          onPressed: () {},
+                          onPressed: () async {
+                            final XFile? xFile = await Get.find<FileUploader>()
+                                .getFile(ImageSource.gallery);
+                            if (xFile == null) return;
+                            final bool result =
+                                await Get.find<FileUploader>().upload(xFile);
+                            if (result) {
+                              print('success');
+                            } else {
+                              print('failed');
+                            }
+                          },
                           child: const Icon(
                             Icons.add,
                             color: Colors.white,

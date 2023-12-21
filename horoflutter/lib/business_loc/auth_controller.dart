@@ -7,8 +7,9 @@ class AuthController extends GetxController {
   final GetStorage _storage = GetStorage();
   static const String acKey = 'accessToken', profileKey = 'profile';
   late RxnString accessToken = RxnString(_storage.read(acKey));
-  late Rxn<Profile> profile = Rxn<Profile>(
-      Profile(username: "hugo").fromJson(_storage.read('profile')));
+  late Rxn<Profile> profile = Rxn<Profile>(Profile(username: "hugo").fromJson(
+    _storage.read('profile'),
+  ));
 
   @override
   void onInit() {

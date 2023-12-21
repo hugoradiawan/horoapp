@@ -11,7 +11,7 @@ import 'package:horoflutter/business_loc/server_response.dart';
 class NestJsConnect extends GetConnect {
   @override
   void onInit() {
-    const String ip = '192.168.1.101';
+    const String ip = '192.168.1.103';
     httpClient.baseUrl = 'http://$ip:3000/api/';
     httpClient.addRequestModifier<dynamic>((request) {
       final String? token = Get.find<AuthController>().accessToken.value;

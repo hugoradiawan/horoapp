@@ -4,6 +4,8 @@ import { ProfileModule } from './profile/profile.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { GridfsModule } from './gridfs/gridfs.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -18,9 +20,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
+    MulterModule.register({
+      dest: 'uploads',
+    }),
     ProfileModule,
     UserModule,
     AuthModule,
+    GridfsModule,
   ],
   providers: [ConfigService],
   exports: [ConfigService],
