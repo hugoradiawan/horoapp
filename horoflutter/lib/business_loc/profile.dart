@@ -1,7 +1,7 @@
 import 'package:horoflutter/business_loc/server_response.dart';
 
 class Profile extends Jsonable {
-  String? username, horoscope, zodiac, imageUrl, birthday, displayName;
+  String? username, horoscope, zodiac, imageUrl, birthday, displayName, id;
   int? height, weight;
   bool? gender;
 
@@ -15,6 +15,7 @@ class Profile extends Jsonable {
     this.gender,
     this.height,
     this.weight,
+    this.id,
   });
 
   @override
@@ -28,6 +29,7 @@ class Profile extends Jsonable {
         if (gender != null) 'gender': gender,
         if (height != null) 'heightInCm': height,
         if (weight != null) 'weightInKg': weight,
+        if (id != null) 'id': id,
       };
 
   @override
@@ -43,6 +45,7 @@ class Profile extends Jsonable {
       gender: json['gender'],
       height: int.tryParse(json['heightInCm'].toString()),
       weight: int.tryParse(json['weightInKg'].toString()),
+      id: json['id'],
     );
   }
 }

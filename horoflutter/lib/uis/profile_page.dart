@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:horoflutter/business_loc/auth_controller.dart';
 import 'package:horoflutter/uis/background.dart';
-import 'package:horoflutter/uis/about_tile.dart';
+import 'package:horoflutter/uis/about/about_tile.dart';
 import 'package:horoflutter/uis/interest_tile.dart';
 
 class ProfilePage extends StatelessWidget {
