@@ -16,18 +16,14 @@ class FileUploader extends GetxController {
   }
 
   Future<bool> upload(XFile xFile) {
-    print(Get.find<AuthController>().profile.value!.displayName!);
-    print(lookupMimeType(xFile.path));
+    final String? profileId = Get.find<AuthController>().profile.value?.id;
+    if (profileId == null) return Future<bool>.value(false);
     return _uploadFile(
       onProgressUpdate: (final double progress) {},
       contentType: lookupMimeType(xFile.path) ?? '',
       filePath: xFile.path,
       fileName: xFile.name,
-      userId: Get.find<AuthController>()
-          .profile
-          .value!
-          .displayName!
-          .replaceAll(' ', ''),
+      profileId: profileId,
     );
   }
 
@@ -36,12 +32,12 @@ class FileUploader extends GetxController {
     required final String contentType,
     required final String filePath,
     required final String fileName,
-    required final String userId,
+    required final String profileId,
   }) async {
     final d.FormData formData = d.FormData.fromMap({
       'file': d.MultipartFile.fromFileSync(
         filePath,
-        filename: '$userId.${fileName.split('.').last}',
+        filename: profileId,
         contentType: MediaType.parse(contentType),
       ),
     });

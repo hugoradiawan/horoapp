@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:horoflutter/business_loc/auth_controller.dart';
-import 'package:horoflutter/uis/background.dart';
 import 'package:horoflutter/uis/about/about_tile.dart';
+import 'package:horoflutter/uis/background.dart';
 import 'package:horoflutter/uis/interest_tile.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -18,10 +18,10 @@ class ProfilePage extends StatelessWidget {
             backgroundColor: Colors.transparent,
             title: InkWell(
               onTap: () => Get.find<AuthController>().erase(),
-              child: const Text(
-                '@johndoe123',
-                style: TextStyle(color: Colors.white),
-              ),
+              child: Obx(() => Text(
+                    '@${Get.find<AuthController>().username}',
+                    style: const TextStyle(color: Colors.white),
+                  )),
             ),
           ),
           body: ListView(
@@ -37,16 +37,16 @@ class ProfilePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "@johndoe123",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Obx(() => Text(
+                          '@${Get.find<AuthController>().username}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        )),
                   )
                 ],
               ),

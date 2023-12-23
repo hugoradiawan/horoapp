@@ -23,12 +23,7 @@ class LoginRegisterController extends GetxController {
   Future<bool> login() async {
     if (loginUserDto.value.usernameOrEmail.isEmpty ||
         loginUserDto.value.password.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill all fields',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      showError('Please fill all fields');
       return false;
     }
     final bool result =
@@ -53,21 +48,11 @@ class LoginRegisterController extends GetxController {
         createUserDto.value.password.isEmpty ||
         confirmPassword.value.isEmpty ||
         createUserDto.value.email.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill all fields',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      showError('Please fill all fields');
       return false;
     }
     if (createUserDto.value.password != confirmPassword.value) {
-      Get.snackbar(
-        'Error',
-        'Password and confirm password must be same',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      showError('Password and confirm password do not match');
       return false;
     }
     final bool result =
@@ -86,6 +71,15 @@ class LoginRegisterController extends GetxController {
     } else {
       return false;
     }
+  }
+
+  void showError(String message) {
+    Get.snackbar(
+      'Error',
+      message,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
   }
 
   @override

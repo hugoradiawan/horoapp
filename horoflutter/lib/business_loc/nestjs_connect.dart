@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:horoflutter/business_loc/ask_horoscope_zodiac_response.dart';
 import 'package:horoflutter/business_loc/auth_controller.dart';
 import 'package:horoflutter/business_loc/create_user_dto.dart';
+import 'package:horoflutter/business_loc/jwt.dart';
 import 'package:horoflutter/business_loc/login_user_dto.dart';
 import 'package:horoflutter/business_loc/profile.dart';
 import 'package:horoflutter/business_loc/server_response.dart';
@@ -11,7 +13,7 @@ import 'package:horoflutter/business_loc/server_response.dart';
 class NestJsConnect extends GetConnect {
   @override
   void onInit() {
-    const String ip = '192.168.1.103';
+    const String ip = '192.168.1.100';
     httpClient.baseUrl = 'http://$ip:3000/api/';
     httpClient.addRequestModifier<dynamic>((request) {
       final String? token = Get.find<AuthController>().accessToken.value;
@@ -21,6 +23,9 @@ class NestJsConnect extends GetConnect {
       return request;
     });
   }
+
+  String get profileUrl =>
+      '${Get.find<NestJsConnect>().httpClient.baseUrl!}file/${Get.find<AuthController>().profile.value!.id!}';
 
   Future<AskHoroscopeZodiacResponse?> askHoroscopeZodiac(
       String birthday) async {
@@ -64,6 +69,7 @@ class NestJsConnect extends GetConnect {
   }
 
   Future<Profile?> getProfile() async {
+    print(Get.find<NestJsConnect>().baseUrl);
     final Response res = await get('getProfile');
     if (res.status.isOk) {
       final ServerResponse<Profile> serverResponse = ServerResponse.fromJson(
@@ -121,29 +127,4 @@ class NestJsConnect extends GetConnect {
       colorText: Colors.white,
     );
   }
-}
-
-class Jwt extends Jsonable {
-  final String accessToken;
-
-  Jwt(Map<String, dynamic> json) : accessToken = json['accessToken'] as String;
-
-  @override
-  Map<String, dynamic> toJson() => {
-        'accessToken': accessToken,
-      };
-}
-
-class AskHoroscopeZodiacResponse extends Jsonable {
-  final String horoscope, zodiac;
-
-  AskHoroscopeZodiacResponse(Map<String, dynamic> json)
-      : horoscope = json['horoscope'] as String,
-        zodiac = json['zodiac'] as String;
-
-  @override
-  Map<String, dynamic> toJson() => {
-        'horoscope': horoscope,
-        'zodiac': zodiac,
-      };
 }

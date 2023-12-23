@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:horoflutter/business_loc/ask_horoscope_zodiac_response.dart';
 import 'package:horoflutter/business_loc/auth_controller.dart';
 import 'package:horoflutter/business_loc/file_upload_controller.dart';
 import 'package:horoflutter/business_loc/nestjs_connect.dart';
@@ -22,10 +24,9 @@ class AboutTileController extends GetxController {
   final DateFormat dateFormat = DateFormat('dd MMM yyyy'),
       dateFormatDash = DateFormat('yyyy-MM-dd');
   final Rxn<DateTime> dob = Rxn<DateTime>();
-  bool isToUpdate = false;
   final ImagePicker imagePicker = ImagePicker();
   final Rxn<XFile> image = Rxn<XFile>();
-  final RxnBool isFetchImageSucceed = RxnBool();
+  final RxBool isFetchImageSucceed = RxBool(true);
 
   @override
   void dispose() {
@@ -54,11 +55,13 @@ class AboutTileController extends GetxController {
     image.value = await imagePicker.pickImage(source: ImageSource.gallery);
   }
 
-  void _uploadImage() async {
+  Future<void> _uploadImage() async {
     if (image.value == null) return;
     final bool result = await Get.find<FileUploader>().upload(image.value!);
     if (!result) return;
     image.value = null;
+    await CachedNetworkImage.evictFromCache(
+        Get.find<NestJsConnect>().profileUrl);
   }
 
   void populateProfile() {
@@ -112,69 +115,47 @@ class AboutTileController extends GetxController {
     zodiacTec.text = res.zodiac;
   }
 
-  Future<void> saveUpdate() async {
+  void validate() {
     if (displayNameTec.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Display name cannot be empty',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      showError('Display name cannot be empty');
       return;
     }
     if (selectedGender.value == null) {
-      Get.snackbar(
-        'Error',
-        'Gender must be selected',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      showError('Gender must be selected');
       return;
     }
     if (dob.value == null) {
-      Get.snackbar(
-        'Error',
-        'Birthday cannot be empty',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      showError('Birthday cannot be empty');
       return;
     }
     if (heightTec.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Height cannot be empty',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      showError('Height cannot be empty');
       return;
     }
     if (weightTec.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Height cannot be empty',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      showError('Weight cannot be empty');
       return;
     }
+  }
+
+  Future<void> saveUpdate() async {
+    validate();
+    _uploadImage();
     bool result = false;
     final Profile? profile = Get.find<AuthController>().profile.value;
-    print(profile?.toJson());
+    final String dashDate = dateFormatDash.format(dob.value!);
+    final bool gender = selectedGender.value == genders[0];
+    final int height = int.parse(heightTec.text),
+        weight = int.parse(weightTec.text);
     if (profile == null) {
       result = await Get.find<NestJsConnect>().createProfile(Profile(
         displayName: displayNameTec.text,
-        birthday: dateFormatDash.format(dob.value!),
-        gender: selectedGender.value == genders[0],
-        height: int.parse(heightTec.text),
-        weight: int.parse(weightTec.text),
+        birthday: dashDate,
+        gender: gender,
+        height: height,
+        weight: weight,
       ));
     } else {
-      print(profile.toJson());
-      final String dashDate = dateFormatDash.format(dob.value!);
-      final bool gender = selectedGender.value == genders[0];
-      final int height = int.parse(heightTec.text),
-          weight = int.parse(weightTec.text);
       result = await Get.find<NestJsConnect>().updateProfile(Profile(
         displayName: displayNameTec.text == profile.displayName
             ? null
@@ -187,5 +168,20 @@ class AboutTileController extends GetxController {
     }
     if (!result) return;
     expansionTileController.collapse();
+    Get.snackbar(
+      'Success',
+      'Profile updated',
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
+  }
+
+  void showError(String message) {
+    Get.snackbar(
+      'Error',
+      message,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
   }
 }

@@ -17,10 +17,14 @@ import { AuthRequest } from 'src/shared/types/auth-request.type';
 import { Response } from 'express';
 import { Profile, ProfileDocument } from './interfaces/profile.interface';
 import { HoroscopeZodiac } from './interfaces/horoscope-zodiac.interface';
+import { UserService } from 'src/user/user.service';
 
 @Controller('api')
 export class ProfileController {
-  constructor(private readonly profileService: ProfileService) {}
+  constructor(
+    private readonly profileService: ProfileService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post('createProfile')
   @UseGuards(AuthGuard)
@@ -52,7 +56,7 @@ export class ProfileController {
       ...createProfileDto,
       horoscope,
       zodiac,
-    } satisfies Profile;
+    } as Profile;
     const isOk = await this.profileService.create(jwtPayload.sub, tosave);
     return res.status(isOk ? 201 : 400).send();
   }
@@ -64,17 +68,20 @@ export class ProfileController {
     @Res() res: Response,
   ): Promise<Response> {
     const jwtPayload = req.payload;
-    const result = await this.profileService.findOne(jwtPayload.sub);
+    const [profile, user] = await Promise.all([
+      this.profileService.findOne(jwtPayload.sub),
+      this.userService.findOneById(jwtPayload.sub),
+    ]);
     const response: ServerResponse<Profile> = {
-      isOk: result !== null,
-      ...(result === null
+      isOk: profile !== null && user !== null,
+      ...(profile === null || user === null
         ? {
             errorCode: 1000,
-            message: `Profile with id ${jwtPayload.sub} not found`,
+            message: `Profile not found`,
           }
-        : { data: this.sanitizeData(result) }),
+        : { data: this.sanitizeData(profile, user?.username) }),
     };
-    return res.status(result === null ? 404 : 201).json(response);
+    return res.status(profile === null ? 404 : 201).json(response);
   }
 
   @Put('updateProfile')
@@ -149,8 +156,9 @@ export class ProfileController {
     return res.status(200).json(response);
   }
 
-  private sanitizeData(data: ProfileDocument): Profile {
+  private sanitizeData(data: ProfileDocument, username: string): Profile {
     const {
+      _id,
       name,
       birthday,
       heightInCm,
@@ -161,8 +169,10 @@ export class ProfileController {
       horoscope,
     } = data;
     return {
+      pId: _id,
       name,
       birthday,
+      username,
       heightInCm,
       weightInKg,
       gender,

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:horoflutter/extensions.dart';
-import 'package:horoflutter/uis/glow_button.dart';
 import 'package:horoflutter/ui_loc/login_register_controller.dart';
+import 'package:horoflutter/uis/glow_button.dart';
 
 class LoginPage extends GetView<LoginRegisterController> {
   const LoginPage({super.key});
@@ -11,6 +11,7 @@ class LoginPage extends GetView<LoginRegisterController> {
   @override
   Widget build(_) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Padding(
             padding: EdgeInsets.symmetric(

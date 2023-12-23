@@ -1,10 +1,12 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:horoflutter/business_loc/file_upload_controller.dart';
+import 'package:horoflutter/business_loc/nestjs_connect.dart';
 import 'package:horoflutter/uis/about/about_textfield.dart';
 import 'package:horoflutter/uis/about/about_tile_controller.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AboutTile extends StatelessWidget {
   const AboutTile({super.key});
@@ -66,30 +68,64 @@ class AboutTile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       children: [
-                        FloatingActionButton(
-                          elevation: 0,
-                          backgroundColor: Colors.white.withOpacity(0.1),
-                          onPressed: () async {
-                            final XFile? xFile = await Get.find<FileUploader>()
-                                .getFile(ImageSource.gallery);
-                            if (xFile == null) return;
-                            final bool result =
-                                await Get.find<FileUploader>().upload(xFile);
-                            if (result) {
-                              print('success');
-                            } else {
-                              print('failed');
-                            }
-                          },
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.white,
+                        Obx(
+                          () => InkWell(
+                            onTap: atc.pickImage,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white.withOpacity(0.1),
+                                ),
+                                child: atc.image.value == null
+                                    ? CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        imageUrl: Get.find<NestJsConnect>()
+                                            .profileUrl,
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                Container(
+                                          alignment: Alignment.center,
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            value: downloadProgress.progress,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) {
+                                          Future.delayed(
+                                            const Duration(milliseconds: 100),
+                                            () => atc.isFetchImageSucceed
+                                                .value = false,
+                                          );
+                                          return const Icon(
+                                            Icons.add,
+                                            size: 35,
+                                            color: Colors.white,
+                                          );
+                                        },
+                                      )
+                                    : Image.file(
+                                        File(atc.image.value!.path),
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
                           ),
                         ),
                         const Gap(20),
-                        const Text(
-                          "Add Image",
-                          style: TextStyle(color: Colors.white),
+                        Obx(
+                          () => TextButton(
+                            onPressed: atc.pickImage,
+                            child: Text(
+                              "${atc.isFetchImageSucceed.value || atc.image.value != null ? 'Change' : 'add'} Image",
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -170,4 +206,3 @@ class AboutTile extends StatelessWidget {
         ),
       );
 }
-

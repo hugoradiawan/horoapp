@@ -29,7 +29,7 @@ export class ProfileService {
     const profile = {
       userId,
       ...createProfileDto,
-    } satisfies Profile;
+    } as Profile;
     const createdProfile = new this.profileModel(profile);
     const result = await createdProfile.save();
     return result !== null;

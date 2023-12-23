@@ -24,14 +24,24 @@ export class GridfsService {
 
     const uploadStream = this.gfs.openUploadStream(file.originalname, {
       contentType: file.mimetype,
-      metadata: file,
     });
 
     readStream.pipe(uploadStream);
   }
 
-  async getFile(filename: string): Promise<Readable> {
-    const downloadStream = this.gfs.openDownloadStreamByName(filename);
-    return downloadStream;
+  async deleteFile(filename: string): Promise<void> {
+    await this.gfs.delete(new mongoose.Types.ObjectId(filename));
+  }
+
+  async getFile(filename: string): Promise<Readable | undefined> {
+    try {
+      const file = await this.gfs.find({ filename }).toArray();
+      if (!file || file.length === 0) {
+        return undefined;
+      }
+      return this.gfs.openDownloadStreamByName(filename);
+    } catch (error) {
+      return undefined;
+    }
   }
 }

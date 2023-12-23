@@ -40,7 +40,7 @@ class UserSwitcher extends GetView<AuthController> {
         () => Navigator(
           pages: [
             if (controller.accessToken.value == null)
-              const MaterialPage(child: LoginRegisterPage())
+              MaterialPage(child: LoginRegisterPage())
             else if (controller.profile.value == null)
               const MaterialPage(child: ProfilePage())
             else

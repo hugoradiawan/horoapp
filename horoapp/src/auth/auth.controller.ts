@@ -48,6 +48,10 @@ export class AuthController {
       return this.buildErrorReponse(res, 2002, 'Username already exists');
     } else {
       const userId = await this.userService.create(createUserDto);
+      if (!userId) {
+        return this.buildErrorReponse(res, 2005, 'User creation failed');
+      }
+      this.profileService.create(userId, {});
       if (userId) {
         return res.status(201).send();
       } else {

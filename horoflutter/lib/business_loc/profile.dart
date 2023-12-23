@@ -29,7 +29,7 @@ class Profile extends Jsonable {
         if (gender != null) 'gender': gender,
         if (height != null) 'heightInCm': height,
         if (weight != null) 'weightInKg': weight,
-        if (id != null) 'id': id,
+        if (id != null) 'pId': id,
       };
 
   @override
@@ -45,7 +45,7 @@ class Profile extends Jsonable {
       gender: json['gender'],
       height: int.tryParse(json['heightInCm'].toString()),
       weight: int.tryParse(json['weightInKg'].toString()),
-      id: json['id'],
+      id: json['pId'],
     );
   }
 }
