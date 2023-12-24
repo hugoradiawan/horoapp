@@ -1,4 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:horoflutter/business_loc/ask_horoscope_zodiac_response.dart';
@@ -6,6 +7,7 @@ import 'package:horoflutter/business_loc/auth_controller.dart';
 import 'package:horoflutter/business_loc/file_upload_controller.dart';
 import 'package:horoflutter/business_loc/nestjs_connect.dart';
 import 'package:horoflutter/business_loc/profile.dart';
+import 'package:horoflutter/ui_loc/profile_controller.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +24,8 @@ class AboutTileController extends GetxController {
   final List<String> genders = ['Male', 'Female'];
   final RxnString selectedGender = RxnString();
   final DateFormat dateFormat = DateFormat('dd MMM yyyy'),
-      dateFormatDash = DateFormat('yyyy-MM-dd');
+      dateFormatDash = DateFormat('yyyy-MM-dd'),
+      dateShow = DateFormat('dd / MM / yyyy');
   final Rxn<DateTime> dob = Rxn<DateTime>();
   final ImagePicker imagePicker = ImagePicker();
   final Rxn<XFile> image = Rxn<XFile>();
@@ -55,18 +58,24 @@ class AboutTileController extends GetxController {
     image.value = await imagePicker.pickImage(source: ImageSource.gallery);
   }
 
+  int? get age {
+    final String? dob =
+        Get.find<AuthController>().profile.value!.birthday?.toString();
+    if (dob == null) return null;
+    final DateTime bd = dateFormatDash.parse(dob);
+    return DateTime.now().difference(bd).inDays ~/ 365;
+  }
+
   Future<void> _uploadImage() async {
     if (image.value == null) return;
     final bool result = await Get.find<FileUploader>().upload(image.value!);
     if (!result) return;
     image.value = null;
-    await CachedNetworkImage.evictFromCache(
-        Get.find<NestJsConnect>().profileUrl);
+    Get.find<ProfileController>().updateProfilePicture();
   }
 
   void populateProfile() {
     final Profile? profile = Get.find<AuthController>().profile.value;
-    print('populate: ${profile?.toJson()}');
     if (profile == null) return;
     displayNameTec.text = profile.displayName ?? '';
     selectedGender.value = profile.gender == null
@@ -167,6 +176,11 @@ class AboutTileController extends GetxController {
       ));
     }
     if (!result) return;
+    unawaited(Get.find<NestJsConnect>().getProfile());
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () => Get.find<ProfileController>().reload(),
+    );
     expansionTileController.collapse();
     Get.snackbar(
       'Success',

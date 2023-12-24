@@ -8,6 +8,7 @@ extension HoroInput on InputDecoration {
     bool isDense = false,
     bool isBordered = false,
     String? unit,
+    double borderRadius = 10,
   }) {
     return InputDecoration(
       hintText: hintText,
@@ -34,14 +35,20 @@ extension HoroInput on InputDecoration {
           : null,
       fillColor: Colors.white.withOpacity(0.1),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(borderRadius),
         borderSide: isBordered
             ? const BorderSide(color: Colors.white)
             : BorderSide.none,
       ),
       isDense: isDense,
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(borderRadius),
+        borderSide: isBordered
+            ? const BorderSide(color: Colors.white)
+            : BorderSide.none,
+      ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(borderRadius),
         borderSide: isBordered
             ? BorderSide(color: Colors.white.withOpacity(0.4))
             : BorderSide.none,

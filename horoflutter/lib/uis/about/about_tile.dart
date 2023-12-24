@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:horoflutter/business_loc/auth_controller.dart';
 import 'package:horoflutter/business_loc/nestjs_connect.dart';
 import 'package:horoflutter/uis/about/about_textfield.dart';
 import 'package:horoflutter/uis/about/about_tile_controller.dart';
@@ -45,18 +47,127 @@ class AboutTile extends StatelessWidget {
                         backgroundColor: Colors.transparent,
                       ),
                       if (!atc.isExpanded.value)
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Gap(15),
-                            Text(
-                              "Add in your profile details to help others know you better",
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                              ),
-                            ),
-                            const Gap(10),
-                          ],
+                        Obx(
+                          () => Get.find<AuthController>()
+                                      .profile
+                                      .value
+                                      ?.isEmpty() ??
+                                  true
+                              ? Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Gap(15),
+                                    Text(
+                                      "Add in your profile details to help others know you better",
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                      ),
+                                    ),
+                                    const Gap(10),
+                                  ],
+                                )
+                              : Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          'Birthday: ',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        Text(
+                                          atc.dob.value == null
+                                              ? ''
+                                              : atc.dateShow.format(
+                                                    atc.dob.value!,
+                                                  ) +
+                                                  (atc.age != null
+                                                      ? ' (Age: ${atc.age})'
+                                                      : ''),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Gap(10),
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          'Horoscope: ',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        Text(
+                                          Get.find<AuthController>()
+                                              .profile
+                                              .value!
+                                              .horoscope!,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Gap(10),
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          'Zodiac: ',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        Text(
+                                          Get.find<AuthController>()
+                                              .profile
+                                              .value!
+                                              .zodiac!,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Gap(10),
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          'Height: ',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        Text(
+                                          '${Get.find<AuthController>().profile.value!.height} cm',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Gap(10),
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          'Weight: ',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        Text(
+                                          '${Get.find<AuthController>().profile.value!.weight} kg',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Gap(20),
+                                  ],
+                                ),
                         )
                       else
                         const SizedBox.shrink()
@@ -183,9 +294,12 @@ class AboutTile extends StatelessWidget {
                     !atc.isExpanded.value
                         ? IconButton(
                             onPressed: atc.expansionTileController.expand,
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.white,
+                            icon: SvgPicture.asset(
+                              'assets/edit.svg',
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcATop,
+                              ),
                             ),
                           )
                         : TextButton(

@@ -30,7 +30,12 @@ export class GridfsService {
   }
 
   async deleteFile(filename: string): Promise<void> {
-    await this.gfs.delete(new mongoose.Types.ObjectId(filename));
+    const file = await this.gfs.find({ filename }).toArray();
+    console.log(file);
+    if (!file || file.length === 0) {
+      return;
+    }
+    await this.gfs.delete(new mongoose.Types.ObjectId(file[0]._id));
   }
 
   async getFile(filename: string): Promise<Readable | undefined> {

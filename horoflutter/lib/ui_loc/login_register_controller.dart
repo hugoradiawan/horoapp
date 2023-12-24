@@ -87,12 +87,4 @@ class LoginRegisterController extends GetxController {
     pg.dispose();
     super.dispose();
   }
-
-  @override
-  void onInit() {
-    createUserDto.listen((p0) {
-      print(p0.toJson);
-    });
-    super.onInit();
-  }
 }

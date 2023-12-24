@@ -13,7 +13,7 @@ import 'package:horoflutter/business_loc/server_response.dart';
 class NestJsConnect extends GetConnect {
   @override
   void onInit() {
-    const String ip = '192.168.1.100';
+    const String ip = '192.168.1.102';
     httpClient.baseUrl = 'http://$ip:3000/api/';
     httpClient.addRequestModifier<dynamic>((request) {
       final String? token = Get.find<AuthController>().accessToken.value;
@@ -25,7 +25,7 @@ class NestJsConnect extends GetConnect {
   }
 
   String get profileUrl =>
-      '${Get.find<NestJsConnect>().httpClient.baseUrl!}file/${Get.find<AuthController>().profile.value!.id!}';
+      '${Get.find<NestJsConnect>().httpClient.baseUrl!}file/${Get.find<AuthController>().profile.value?.id}';
 
   Future<AskHoroscopeZodiacResponse?> askHoroscopeZodiac(
       String birthday) async {
@@ -69,7 +69,6 @@ class NestJsConnect extends GetConnect {
   }
 
   Future<Profile?> getProfile() async {
-    print(Get.find<NestJsConnect>().baseUrl);
     final Response res = await get('getProfile');
     if (res.status.isOk) {
       final ServerResponse<Profile> serverResponse = ServerResponse.fromJson(
@@ -92,7 +91,6 @@ class NestJsConnect extends GetConnect {
   }
 
   Future<bool> createProfile(Profile profile) async {
-    print(profile.toJson());
     final Response res = await post('createProfile', profile.toJson());
     if (res.status.isOk) {
       unawaited(getProfile());
@@ -104,10 +102,8 @@ class NestJsConnect extends GetConnect {
   }
 
   Future<bool> updateProfile(Profile profile) async {
-    print(profile.toJson(withUsername: false));
     final Response res =
         await put('updateProfile', profile.toJson(withUsername: false));
-    print(res.statusCode);
     if (res.status.isOk) {
       return true;
     } else {
@@ -119,7 +115,6 @@ class NestJsConnect extends GetConnect {
 
   void handleError(Response res) {
     final ServerResponse serverResponse = ServerResponse.fromJson(res.body);
-
     Get.snackbar(
       'Error',
       '${serverResponse.message ?? ''} (${serverResponse.errorCode})',

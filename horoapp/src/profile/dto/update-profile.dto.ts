@@ -24,5 +24,5 @@ export class UpdateProfileDto {
   readonly weightInKg?: number;
   @IsOptional()
   @IsArray()
-  readonly interest?: string[];
+  readonly interests?: string[];
 }

@@ -9,5 +9,5 @@ export const ProfileSchema = new Schema({
   weightInKg: Number,
   horoscope: String,
   zodiac: String,
-  interest: [String],
+  interests: [String],
 });

@@ -18,12 +18,14 @@ import { Response } from 'express';
 import { Profile, ProfileDocument } from './interfaces/profile.interface';
 import { HoroscopeZodiac } from './interfaces/horoscope-zodiac.interface';
 import { UserService } from 'src/user/user.service';
+import { GridfsService } from 'src/gridfs/gridfs.service';
 
 @Controller('api')
 export class ProfileController {
   constructor(
     private readonly profileService: ProfileService,
     private readonly userService: UserService,
+    private readonly gridfsService: GridfsService,
   ) {}
 
   @Post('createProfile')
@@ -84,6 +86,19 @@ export class ProfileController {
     return res.status(profile === null ? 404 : 201).json(response);
   }
 
+  @Get('resetProfile')
+  @UseGuards(AuthGuard)
+  async reset(@Req() req: AuthRequest): Promise<boolean> {
+    const jwtPayload = req.payload;
+    await this.profileService.reset(jwtPayload.sub);
+    const profile = await this.profileService.findOne(jwtPayload.sub);
+    console.log(profile?._id);
+    if (profile) {
+      await this.gridfsService.deleteFile(profile._id.toString());
+    }
+    return true;
+  }
+
   @Put('updateProfile')
   @UseGuards(AuthGuard)
   async update(
@@ -112,6 +127,7 @@ export class ProfileController {
         zodiac,
       };
     }
+    console.log(toupdate);
     const isOk = await this.profileService.update(jwtPayload.sub, toupdate);
     return res.status(isOk ? 200 : 400).send();
   }
@@ -168,7 +184,7 @@ export class ProfileController {
       zodiac,
       horoscope,
     } = data;
-    return {
+    const tempdata = {
       pId: _id,
       name,
       birthday,
@@ -180,5 +196,7 @@ export class ProfileController {
       zodiac,
       horoscope,
     };
+    if (tempdata.interests?.length === 0) delete tempdata.interests;
+    return tempdata;
   }
 }

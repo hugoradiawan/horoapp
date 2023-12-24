@@ -50,6 +50,12 @@ export class ProfileService {
     return result.modifiedCount === 1;
   }
 
+  async reset(userId: string): Promise<boolean> {
+    // rewrite data with only userId field, the rest is undefined
+    const result = await this.profileModel.replaceOne({ userId }, { userId });
+    return result.modifiedCount === 1;
+  }
+
   async getHoroscope(dob: string): Promise<Horoscope> {
     const [year, month, day] = dob.split('-').map(Number);
     const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
