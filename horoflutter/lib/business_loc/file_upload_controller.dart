@@ -9,7 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 
 class FileUploader extends GetxController {
-  final d.Dio httpClient = d.Dio();
+  final d.Dio httpClient = d.Dio(
+    d.BaseOptions(
+      baseUrl: Get.find<NestJsConnect>().gridFsUrl,
+    ),
+  );
 
   Future<XFile?> getFile(ImageSource source) {
     return ImagePicker().pickImage(source: source);
@@ -42,7 +46,7 @@ class FileUploader extends GetxController {
       ),
     });
     final d.Response<bool> res = await httpClient.put(
-      '${Get.find<NestJsConnect>().httpClient.baseUrl}upload',
+      'upload',
       data: formData,
       options: d.Options(
         headers: {

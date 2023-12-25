@@ -1,0 +1,3 @@
+VHOST: /
+QUEUE: gridfs_queue
+INDEX: v2
