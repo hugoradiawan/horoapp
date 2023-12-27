@@ -1,7 +1,7 @@
 import 'package:horoflutter/business_loc/server_response.dart';
 
 class Profile extends Jsonable {
-  String? username, horoscope, zodiac, birthday, displayName, id;
+  String? username, horoscope, zodiac, birthday, displayName, id, userId;
   int? height, weight;
   bool? gender;
   List<String>? interests;
@@ -14,6 +14,7 @@ class Profile extends Jsonable {
     this.zodiac,
     this.gender,
     this.height,
+    this.userId,
     this.weight,
     this.id,
     this.interests,
@@ -22,6 +23,7 @@ class Profile extends Jsonable {
   @override
   Map<String, dynamic> toJson({bool withUsername = true}) => {
         if (withUsername && username != null) 'username': username,
+        if (userId != null) 'userId': userId,
         if (horoscope != null) 'horoscope': horoscope,
         if (zodiac != null) 'zodiac': zodiac,
         if (birthday != null) 'birthday': birthday,
@@ -31,6 +33,7 @@ class Profile extends Jsonable {
         if (weight != null) 'weightInKg': weight,
         if (id != null) 'pId': id,
         if (interests != null) 'interests': interests,
+        if (id != null) '_id': id,
       };
 
   bool isEmpty() =>
@@ -46,6 +49,7 @@ class Profile extends Jsonable {
     if (json == null) return null;
     return Profile(
       username: json['username'],
+      userId: json['userId'],
       horoscope: json['horoscope'],
       zodiac: json['zodiac'],
       birthday: json['birthday'],
@@ -53,7 +57,7 @@ class Profile extends Jsonable {
       gender: json['gender'],
       height: int.tryParse(json['heightInCm'].toString()),
       weight: int.tryParse(json['weightInKg'].toString()),
-      id: json['pId'],
+      id: json['pId'] ?? json['_id'],
       interests: json['interests'] == null
           ? null
           : List<String>.from(json['interests']),

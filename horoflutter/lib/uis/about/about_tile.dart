@@ -18,6 +18,7 @@ class AboutTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         child: GetX<AboutTileController>(
           init: AboutTileController(),
+          key: key,
           builder: (atc) => Stack(
             alignment: Alignment.topCenter,
             children: [

@@ -13,7 +13,7 @@ import 'package:horoflutter/business_loc/server_response.dart';
 class NestJsConnect extends GetConnect {
   static const port = 3000;
   static const gridFsPort = 3001;
-  static const String ip = '192.168.1.102';
+  static const String ip = '192.168.1.101';
   @override
   void onInit() {
     httpClient.baseUrl = 'http://$ip:$port/api/';
@@ -31,6 +31,9 @@ class NestJsConnect extends GetConnect {
   String get profileUrl =>
       '${Get.find<NestJsConnect>().gridFsUrl}file/${Get.find<AuthController>().profile.value?.id}';
 
+  String getProfileUrl(String id) =>
+      '${Get.find<NestJsConnect>().gridFsUrl}file/$id';
+
   Future<AskHoroscopeZodiacResponse?> askHoroscopeZodiac(
       String birthday) async {
     final Response res =
@@ -45,6 +48,22 @@ class NestJsConnect extends GetConnect {
     } else {
       handleError(res);
       return null;
+    }
+  }
+
+  Future<List<Profile>> getProfiles() async {
+    final Response res = await get('profiles');
+    if (res.status.isOk) {
+      print(res.body);
+      final List<dynamic> jsonList = res.body['data'];
+      final List<Profile> profiles = [];
+      for (final dynamic json in jsonList) {
+        profiles.add(Profile().fromJson(json) ?? Profile());
+      }
+      return profiles;
+    } else {
+      handleError(res);
+      return [];
     }
   }
 

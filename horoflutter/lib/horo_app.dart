@@ -41,10 +41,10 @@ class UserSwitcher extends GetView<AuthController> {
           pages: [
             if (controller.accessToken.value == null)
               MaterialPage(child: LoginRegisterPage())
-            else if (controller.profile.value == null)
+            else if (controller.profile.value?.isEmpty() ?? true)
               const MaterialPage(child: ProfilePage())
             else
-              const MaterialPage(child: ProfilePage())
+              const MaterialPage(child: HomePage())
           ],
           onPopPage: (route, result) => route.didPop(result),
         ),

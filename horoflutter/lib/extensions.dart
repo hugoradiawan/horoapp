@@ -5,6 +5,8 @@ extension HoroInput on InputDecoration {
     String? hintText,
     bool? isObscure,
     VoidCallback? onPressed,
+    Widget? prefixIcon,
+    TextStyle? hintStyle,
     bool isDense = false,
     bool isBordered = false,
     String? unit,
@@ -12,10 +14,12 @@ extension HoroInput on InputDecoration {
   }) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: const TextStyle(
-        color: Colors.white,
-      ),
+      hintStyle: hintStyle ??
+          const TextStyle(
+            color: Colors.white,
+          ),
       filled: true,
+      prefixIcon: prefixIcon,
       suffix: unit != null
           ? Text(
               unit,
