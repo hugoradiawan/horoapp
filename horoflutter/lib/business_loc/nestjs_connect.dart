@@ -54,7 +54,6 @@ class NestJsConnect extends GetConnect {
   Future<List<Profile>> getProfiles() async {
     final Response res = await get('profiles');
     if (res.status.isOk) {
-      print(res.body);
       final List<dynamic> jsonList = res.body['data'];
       final List<Profile> profiles = [];
       for (final dynamic json in jsonList) {

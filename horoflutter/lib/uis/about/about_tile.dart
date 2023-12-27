@@ -221,10 +221,15 @@ class AboutTile extends StatelessWidget {
                                           );
                                         },
                                       )
-                                    : Image.file(
-                                        File(atc.image.value!.path),
-                                        fit: BoxFit.cover,
-                                      ),
+                                    : GetPlatform.isWeb
+                                        ? Image.network(
+                                            atc.image.value!.path,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.file(
+                                            File(atc.image.value!.path),
+                                            fit: BoxFit.cover,
+                                          ),
                               ),
                             ),
                           ),

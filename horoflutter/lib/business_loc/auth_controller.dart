@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:horoflutter/business_loc/nestjs_connect.dart';
@@ -33,6 +34,8 @@ class AuthController extends GetxController {
     _storage.erase();
     accessToken.value = null;
     profile.value = null;
+    imageCache.clear();
+    imageCache.clearLiveImages();
   }
 
   String get username => profile.value?.username ?? '';
