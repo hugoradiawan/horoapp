@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:horoflutter/business_loc/nestjs_connect.dart';
 import 'package:horoflutter/business_loc/profile.dart';
+import 'package:horoflutter/ui_loc/chat_controller.dart';
+import 'package:horoflutter/ui_loc/profile_controller.dart';
 
 class AuthController extends GetxController {
   final GetStorage _storage = GetStorage();
@@ -31,6 +33,8 @@ class AuthController extends GetxController {
   }
 
   void erase() {
+    Get.find<ChatController>().quitRoom();
+    Get.find<ProfileController>().reload();
     _storage.erase();
     accessToken.value = null;
     profile.value = null;

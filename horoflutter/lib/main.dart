@@ -13,7 +13,7 @@ Future<void> main() async {
     GetStorage.init(),
     initializeDateFormatting('en'),
   ]);
-  Get.lazyPut(() => NestJsConnect());
+  Get.lazyPut(() => NestJsConnect(ip: '192.168.1.100'));
   Get.lazyPut(() => FileUploader());
   Get.lazyPut(() => ProfileController(), fenix: true);
   runApp(const HoroApp());

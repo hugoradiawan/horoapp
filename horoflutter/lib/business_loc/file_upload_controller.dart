@@ -31,17 +31,29 @@ class FileUploader extends GetxController {
     );
   }
 
+  Future<String?> uploadChatImage(XFile xFile) async {
+    print(xFile.mimeType);
+    final bool result = await _uploadFile(
+      onProgressUpdate: (final double progress) {},
+      contentType: lookupMimeType(xFile.path) ?? xFile.mimeType ?? '',
+      filePath: xFile.path,
+      fileName: xFile.name,
+    );
+    if (!result) return null;
+    return xFile.name;
+  }
+
   Future<bool> _uploadFile({
     required final void Function(double) onProgressUpdate,
     required final String contentType,
     required final String filePath,
     required final String fileName,
-    required final String profileId,
+    final String? profileId,
   }) async {
     final d.FormData formData = d.FormData.fromMap({
       'file': d.MultipartFile.fromFileSync(
         filePath,
-        filename: profileId,
+        filename: profileId ?? fileName,
         contentType: MediaType.parse(contentType),
       ),
     });

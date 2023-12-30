@@ -11,6 +11,17 @@ class ProfileController extends GetxController {
   final RxBool isFetchImageSucceed = RxBool(true);
   final RxInt cacheKey = RxInt(0);
 
+  @override
+  void onInit() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (profile.value?.isEmpty() ?? true) {
+        print('profile is empty');
+        reload();
+      }
+    });
+    super.onInit();
+  }
+
   int? get age {
     final String? dob = profile.value?.birthday;
     if (dob == null) return null;

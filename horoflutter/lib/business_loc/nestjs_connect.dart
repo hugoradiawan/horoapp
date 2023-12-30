@@ -13,14 +13,16 @@ import 'package:horoflutter/business_loc/server_response.dart';
 class NestJsConnect extends GetConnect {
   static const port = 3000;
   static const gridFsPort = 3001;
-  static const String ip = '192.168.1.100';
+  final String ip;
+
+  NestJsConnect({required this.ip});
   @override
   void onInit() {
     httpClient.baseUrl = 'http://$ip:$port/api/';
     httpClient.addRequestModifier<dynamic>((request) {
       final String? token = Get.find<AuthController>().accessToken.value;
       if (token != null) {
-        request.headers['x-access-token'] = token;
+        request.headers['x-access-token'] = 'Bearer $token';
       }
       return request;
     });
@@ -28,8 +30,11 @@ class NestJsConnect extends GetConnect {
 
   String get gridFsUrl => 'http://$ip:$gridFsPort/api/';
 
-  String get profileUrl =>
-      '${Get.find<NestJsConnect>().gridFsUrl}file/${Get.find<AuthController>().profile.value?.id}';
+  String get profileUrl {
+    print(
+        '${Get.find<NestJsConnect>().gridFsUrl}file/${Get.find<AuthController>().profile.value?.id}');
+    return '${Get.find<NestJsConnect>().gridFsUrl}file/${Get.find<AuthController>().profile.value?.id}';
+  }
 
   String getProfileUrl(String id) =>
       '${Get.find<NestJsConnect>().gridFsUrl}file/$id';

@@ -31,24 +31,32 @@ class ChatTile extends StatelessWidget {
           leading: CircleAvatar(
             radius: 25,
             backgroundColor: Colors.white.withOpacity(0.2),
-            child: ClipOval(
-              child: CachedNetworkImage(
-                imageUrl:
-                    Get.find<NestJsConnect>().getProfileUrl(data.profileId[0]),
-                fit: BoxFit.cover,
-                width: double.infinity,
-                progressIndicatorBuilder: (context, url, progress) => SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: CircularProgressIndicator(
-                    value: progress.progress,
+            child: data.profileId.isNotEmpty
+                ? ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: Get.find<NestJsConnect>()
+                          .getProfileUrl(data.profileId[0]),
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: CircularProgressIndicator(
+                          value: progress.progress,
+                        ),
+                      ),
+                    ),
+                  )
+                : const Center(
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-              ),
-            ),
           ),
           title: Text(
-            data.name[0],
+            data.name.isNotEmpty ? data.name[0] : '',
             style: const TextStyle(color: Colors.white),
           ),
           subtitle: Text(
