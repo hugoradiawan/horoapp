@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:horoflutter/business_loc/chat.dart';
 import 'package:horoflutter/ui_loc/chat_controller.dart';
-import 'package:horoflutter/uis/chat_tile.dart';
+import 'package:horoflutter/uis/chat/chat_tile.dart';
 
 class ChatListPage extends StatelessWidget {
   const ChatListPage({super.key});

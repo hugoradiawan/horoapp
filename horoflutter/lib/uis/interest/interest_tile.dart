@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:horoflutter/business_loc/auth_controller.dart';
-import 'package:horoflutter/uis/interest_page.dart';
+import 'package:horoflutter/uis/interest/interest_page.dart';
 
 class InterestTile extends StatelessWidget {
   const InterestTile({

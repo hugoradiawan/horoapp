@@ -14,4 +14,10 @@ class Chat {
         profileId: jsonData['profileId'].cast<String>(),
         lastMesage: jsonData['lastMesage'].toString(),
       );
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'profileId': profileId,
+        'lastMesage': lastMesage,
+      };
 }

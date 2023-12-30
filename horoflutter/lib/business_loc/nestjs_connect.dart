@@ -13,7 +13,7 @@ import 'package:horoflutter/business_loc/server_response.dart';
 class NestJsConnect extends GetConnect {
   static const port = 3000;
   static const gridFsPort = 3001;
-  static const String ip = '192.168.1.101';
+  static const String ip = '192.168.1.100';
   @override
   void onInit() {
     httpClient.baseUrl = 'http://$ip:$port/api/';

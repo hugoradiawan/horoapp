@@ -6,7 +6,7 @@ import 'package:horoflutter/business_loc/nestjs_connect.dart';
 import 'package:horoflutter/ui_loc/home_page_controller.dart';
 import 'package:horoflutter/ui_loc/profile_controller.dart';
 import 'package:horoflutter/uis/background.dart';
-import 'package:horoflutter/uis/chatlist_page.dart';
+import 'package:horoflutter/uis/chat/chatlist_page.dart';
 import 'package:horoflutter/uis/matches_page.dart';
 import 'package:horoflutter/uis/profile_content.dart';
 

@@ -2,12 +2,13 @@ import 'dart:math';
 
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:horoflutter/business_loc/auth_controller.dart';
 import 'package:horoflutter/business_loc/chat.dart';
 import 'package:horoflutter/business_loc/chatroom.dart';
 import 'package:horoflutter/business_loc/nestjs_connect.dart';
 import 'package:horoflutter/business_loc/profile.dart';
-import 'package:horoflutter/uis/chatroom_page.dart';
+import 'package:horoflutter/uis/chat/chatroom_page.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class ChatController extends GetxController {
@@ -16,8 +17,9 @@ class ChatController extends GetxController {
     OptionBuilder().setTransports(['websocket']).disableAutoConnect().build(),
   );
   String? roomId;
+  final String chatKey = 'chat';
   final Rxn<Profile> profile = Rxn<Profile>();
-  final RxList<Chat> chats = <Chat>[].obs;
+  late RxList<Chat> chats = RxList<Chat>(localData);
   late ChatUser chatter;
 
   late RxList<ChatMessage> messages = RxList<ChatMessage>(
@@ -37,6 +39,10 @@ class ChatController extends GetxController {
       firstName: profile.username,
       profileImage: Get.find<NestJsConnect>().profileUrl,
     );
+    requestList();
+    chats.listen((_) {
+      GetStorage().write(chatKey, chats.map((e) => e.toJson()).toList());
+    });
     super.onInit();
   }
 
@@ -45,6 +51,11 @@ class ChatController extends GetxController {
       'userId': chatter.id,
       'roomId': roomId,
     });
+  }
+
+  List<Chat> get localData {
+    final List rawChats = GetStorage().read<List<dynamic>>(chatKey) ?? [];
+    return rawChats.map<Chat>((e) => Chat.fromJson(e)).toList();
   }
 
   void openRoom(Profile pro) {
@@ -73,7 +84,10 @@ class ChatController extends GetxController {
   }
 
   void quitRoom() {
-    socket.emit('quitRoom', {'roomId': roomId});
+    socket.emit('quitRoom', {
+      'roomId': roomId,
+      'userId': chatter.id,
+    });
     roomId = null;
   }
 

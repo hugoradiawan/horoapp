@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:horoflutter/business_loc/auth_controller.dart';
 import 'package:horoflutter/ui_loc/main_binding.dart';
-import 'package:horoflutter/uis/home_page.dart';
-import 'package:horoflutter/uis/login_or_register_page.dart';
-import 'package:horoflutter/uis/profile_page.dart';
+import 'package:horoflutter/user_switcher.dart';
 
 class HoroApp extends StatelessWidget {
   const HoroApp({super.key});
@@ -16,6 +13,8 @@ class HoroApp extends StatelessWidget {
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Color.fromARGB(255, 11, 24, 30),
+        statusBarBrightness: Brightness.light,
       ),
     );
     return GetMaterialApp(
@@ -31,23 +30,4 @@ class HoroApp extends StatelessWidget {
       home: const UserSwitcher(),
     );
   }
-}
-
-class UserSwitcher extends GetView<AuthController> {
-  const UserSwitcher({super.key});
-
-  @override
-  Widget build(_) => Obx(
-        () => Navigator(
-          pages: [
-            if (controller.accessToken.value == null)
-              MaterialPage(child: LoginRegisterPage())
-            else if (controller.profile.value?.isEmpty() ?? true)
-              const MaterialPage(child: ProfilePage())
-            else
-              const MaterialPage(child: HomePage())
-          ],
-          onPopPage: (route, result) => route.didPop(result),
-        ),
-      );
 }

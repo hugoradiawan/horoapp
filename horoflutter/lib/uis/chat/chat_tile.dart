@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:horoflutter/business_loc/chat.dart';
 import 'package:horoflutter/business_loc/nestjs_connect.dart';
+import 'package:horoflutter/business_loc/profile.dart';
+import 'package:horoflutter/ui_loc/chat_controller.dart';
 
 class ChatTile extends StatelessWidget {
   const ChatTile({
@@ -20,18 +22,27 @@ class ChatTile extends StatelessWidget {
           color: Colors.white.withOpacity(0.05),
         ),
         child: ListTile(
-          onTap: () {},
+          onTap: () {
+            Get.find<ChatController>().openRoom(Profile(
+              id: data.profileId[0],
+              displayName: data.name[0],
+            ));
+          },
           leading: CircleAvatar(
             radius: 25,
+            backgroundColor: Colors.white.withOpacity(0.2),
             child: ClipOval(
               child: CachedNetworkImage(
                 imageUrl:
                     Get.find<NestJsConnect>().getProfileUrl(data.profileId[0]),
                 fit: BoxFit.cover,
                 width: double.infinity,
-                progressIndicatorBuilder: (context, url, progress) =>
-                    CircularProgressIndicator(
-                  value: progress.progress,
+                progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CircularProgressIndicator(
+                    value: progress.progress,
+                  ),
                 ),
               ),
             ),

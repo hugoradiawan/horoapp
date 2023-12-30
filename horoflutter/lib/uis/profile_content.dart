@@ -7,7 +7,7 @@ import 'package:horoflutter/business_loc/nestjs_connect.dart';
 import 'package:horoflutter/ui_loc/profile_controller.dart';
 import 'package:horoflutter/uis/about/about_tile.dart';
 import 'package:horoflutter/uis/home_page.dart';
-import 'package:horoflutter/uis/interest_tile.dart';
+import 'package:horoflutter/uis/interest/interest_tile.dart';
 import 'package:horoflutter/uis/zoho_chip.dart';
 
 class ProfileContent extends StatelessWidget {
