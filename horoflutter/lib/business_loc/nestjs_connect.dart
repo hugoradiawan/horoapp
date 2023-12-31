@@ -30,11 +30,8 @@ class NestJsConnect extends GetConnect {
 
   String get gridFsUrl => 'http://$ip:$gridFsPort/api/';
 
-  String get profileUrl {
-    print(
-        '${Get.find<NestJsConnect>().gridFsUrl}file/${Get.find<AuthController>().profile.value?.id}');
-    return '${Get.find<NestJsConnect>().gridFsUrl}file/${Get.find<AuthController>().profile.value?.id}';
-  }
+  String get profileUrl =>
+      '${Get.find<NestJsConnect>().gridFsUrl}file/${Get.find<AuthController>().profile.value?.id}';
 
   String getProfileUrl(String id) =>
       '${Get.find<NestJsConnect>().gridFsUrl}file/$id';
@@ -53,6 +50,16 @@ class NestJsConnect extends GetConnect {
     } else {
       handleError(res);
       return null;
+    }
+  }
+
+  Future<bool> isUsernameExist(String username) async {
+    final Response res = await post('isUsernameExist', {'username': username});
+    if (res.status.isOk) {
+      return res.body['data'] as bool;
+    } else {
+      handleError(res);
+      return true;
     }
   }
 

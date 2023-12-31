@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:horoflutter/extensions.dart';
-import 'package:horoflutter/uis/glow_button.dart';
 import 'package:horoflutter/ui_loc/login_register_controller.dart';
+import 'package:horoflutter/uis/glow_button.dart';
 
 class RegisterPage extends GetView<LoginRegisterController> {
   const RegisterPage({super.key});
@@ -35,19 +35,16 @@ class RegisterPage extends GetView<LoginRegisterController> {
               vertical: 8,
               horizontal: 12,
             ),
-            child: TextField(
-              onChanged: (value) {
-                controller.createUserDto.update((val) {
-                  if (val == null) return;
-                  val.email = value;
-                });
-              },
-              style: const TextStyle(
-                color: Colors.white,
+            child: ObxValue<RxnString>(
+              (val) => TextField(
+                onChanged: controller.validateEmail,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration().horoTransparent(
+                  hintText: 'Enter Email',
+                  errorText: val.value,
+                ),
               ),
-              decoration: const InputDecoration().horoTransparent(
-                hintText: 'Enter Email',
-              ),
+              controller.emailError,
             ),
           ),
           Padding(
@@ -55,19 +52,17 @@ class RegisterPage extends GetView<LoginRegisterController> {
               vertical: 8,
               horizontal: 12,
             ),
-            child: TextField(
-              onChanged: (value) {
-                controller.createUserDto.update((val) {
-                  if (val == null) return;
-                  val.username = value;
-                });
-              },
-              style: const TextStyle(
-                color: Colors.white,
+            child: ObxValue<RxnString>(
+              (val) => TextField(
+                onChanged: controller.validateUsername,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration().horoTransparent(
+                  errorText: val.value,
+                  hintText: 'Enter Username',
+                  prefixText: '@',
+                ),
               ),
-              decoration: const InputDecoration().horoTransparent(
-                hintText: 'Enter Username',
-              ),
+              controller.usernameError,
             ),
           ),
           Padding(
@@ -78,15 +73,8 @@ class RegisterPage extends GetView<LoginRegisterController> {
             child: Obx(
               () => TextField(
                 keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  controller.createUserDto.update((val) {
-                    if (val == null) return;
-                    val.password = value;
-                  });
-                },
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
+                onChanged: controller.validatePassword,
+                style: const TextStyle(color: Colors.white),
                 obscureText: controller.isObscure.value,
                 decoration: const InputDecoration(
                   suffix: Icon(
@@ -97,6 +85,7 @@ class RegisterPage extends GetView<LoginRegisterController> {
                   hintText: 'Enter Password',
                   isObscure: controller.isObscure.value,
                   onPressed: controller.isObscure.toggle,
+                  errorText: controller.passwordError.value,
                 ),
               ),
             ),
@@ -109,12 +98,8 @@ class RegisterPage extends GetView<LoginRegisterController> {
             child: Obx(
               () => TextField(
                 keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  controller.confirmPassword.value = value;
-                },
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
+                onChanged: controller.validateConfirmPassword,
+                style: const TextStyle(color: Colors.white),
                 obscureText: controller.isObscure.value,
                 decoration: const InputDecoration(
                   suffix: Icon(
@@ -125,6 +110,7 @@ class RegisterPage extends GetView<LoginRegisterController> {
                   hintText: 'Confirm Password',
                   isObscure: controller.isObscure.value,
                   onPressed: controller.isObscure.toggle,
+                  errorText: controller.confirmPasswordError.value,
                 ),
               ),
             ),

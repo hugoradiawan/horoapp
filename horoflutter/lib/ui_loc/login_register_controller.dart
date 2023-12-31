@@ -10,6 +10,10 @@ class LoginRegisterController extends GetxController {
   final Rx<CreateUserDto> createUserDto = CreateUserDto.init().obs;
   final Rx<LoginUserDto> loginUserDto = LoginUserDto.init().obs;
   final RxString confirmPassword = ''.obs;
+  final RxnString usernameError = RxnString(null),
+      emailError = RxnString(null),
+      passwordError = RxnString(null),
+      confirmPasswordError = RxnString(null);
 
   void toggleLoginRegister() {
     isLogin.value = !isLogin.value;
@@ -18,6 +22,61 @@ class LoginRegisterController extends GetxController {
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+  }
+
+  void validateUsername(String value) async {
+    if (value.isEmpty) {
+      usernameError.value = 'Username is required';
+    } else if (await Get.find<NestJsConnect>().isUsernameExist(value)) {
+      usernameError.value = 'Username already exists';
+    } else {
+      usernameError.value = null;
+      createUserDto.update((val) {
+        if (val == null) return;
+        val.username = value;
+      });
+    }
+  }
+
+  void validateEmail(String value) {
+    if (value.isEmpty) {
+      emailError.value = 'Email is required';
+    } else if (!value.isEmail) {
+      emailError.value = 'Email is invalid';
+    } else {
+      emailError.value = null;
+      createUserDto.update((val) {
+        if (val == null) return;
+        val.email = value;
+      });
+    }
+  }
+
+  void validatePassword(String value) {
+    if (value.isEmpty) {
+      passwordError.value = 'Password is required';
+    } else if (value.length < 6) {
+      passwordError.value = 'Password must be at least 6 characters';
+    } else if (!value.isNumericOnly) {
+      passwordError.value = 'Password must be numeric only';
+    } else {
+      passwordError.value = null;
+      createUserDto.update((val) {
+        if (val == null) return;
+        val.password = value;
+      });
+    }
+  }
+
+  void validateConfirmPassword(String value) {
+    if (value.isEmpty) {
+      confirmPasswordError.value = 'Confirm password is required';
+    } else if (value != createUserDto.value.password) {
+      confirmPasswordError.value = 'Confirm password does not match';
+    } else {
+      confirmPasswordError.value = null;
+      confirmPassword.value = value;
+    }
   }
 
   Future<bool> login() async {

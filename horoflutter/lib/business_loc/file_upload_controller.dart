@@ -32,7 +32,6 @@ class FileUploader extends GetxController {
   }
 
   Future<String?> uploadChatImage(XFile xFile) async {
-    print(xFile.mimeType);
     final bool result = await _uploadFile(
       onProgressUpdate: (final double progress) {},
       contentType: lookupMimeType(xFile.path) ?? xFile.mimeType ?? '',

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 extension HoroInput on InputDecoration {
   InputDecoration horoTransparent({
     String? hintText,
+    String? prefixText,
     bool? isObscure,
     VoidCallback? onPressed,
     Widget? prefixIcon,
+    String? errorText,
     TextStyle? hintStyle,
     bool isDense = false,
     bool isBordered = false,
@@ -14,6 +16,8 @@ extension HoroInput on InputDecoration {
   }) {
     return InputDecoration(
       hintText: hintText,
+      errorText: errorText,
+      prefixText: prefixText,
       hintStyle: hintStyle ??
           const TextStyle(
             color: Colors.white,

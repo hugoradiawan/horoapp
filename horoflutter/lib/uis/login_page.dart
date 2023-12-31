@@ -106,6 +106,7 @@ class LoginPage extends GetView<LoginRegisterController> {
                       color: Colors.yellow,
                     ),
                     child: InkWell(
+                      key: const Key('RegisterSwitch'),
                       onTap: controller.toggleLoginRegister,
                       child: const Text(
                         'Register here',
