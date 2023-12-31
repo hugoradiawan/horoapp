@@ -37,6 +37,7 @@ class RegisterPage extends GetView<LoginRegisterController> {
             ),
             child: ObxValue<RxnString>(
               (val) => TextField(
+                key: const Key('emailtec'),
                 onChanged: controller.validateEmail,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration().horoTransparent(
@@ -54,6 +55,7 @@ class RegisterPage extends GetView<LoginRegisterController> {
             ),
             child: ObxValue<RxnString>(
               (val) => TextField(
+                key: const Key('usernametec'),
                 onChanged: controller.validateUsername,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration().horoTransparent(
@@ -72,6 +74,7 @@ class RegisterPage extends GetView<LoginRegisterController> {
             ),
             child: Obx(
               () => TextField(
+                key: const Key('passwordtec'),
                 keyboardType: TextInputType.number,
                 onChanged: controller.validatePassword,
                 style: const TextStyle(color: Colors.white),
@@ -97,6 +100,7 @@ class RegisterPage extends GetView<LoginRegisterController> {
             ),
             child: Obx(
               () => TextField(
+                key: const Key('confirmpasswordtec'),
                 keyboardType: TextInputType.number,
                 onChanged: controller.validateConfirmPassword,
                 style: const TextStyle(color: Colors.white),
@@ -121,6 +125,7 @@ class RegisterPage extends GetView<LoginRegisterController> {
               horizontal: 12,
             ),
             child: GlowButton(
+              key: const Key('registerbtn'),
               text: 'Register',
               onPressed: () => controller.register(),
             ),
