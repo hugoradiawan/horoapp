@@ -7,7 +7,7 @@ import 'package:horoflutter/ui_loc/chat_controller.dart';
 import 'package:horoflutter/ui_loc/profile_controller.dart';
 
 class AuthController extends GetxController {
-  final GetStorage _storage = GetStorage();
+  late final GetStorage _storage;
   static const String acKey = 'accessToken', profileKey = 'profile';
   late RxnString accessToken = RxnString(_storage.read(acKey));
   late Rxn<Profile> profile = Rxn<Profile>(Profile().fromJson(
@@ -16,15 +16,22 @@ class AuthController extends GetxController {
 
   @override
   void onInit() {
-    ever(accessToken, (String? token) async {
-      _storage.write(acKey, token);
-      if (token != null) {
-        profile.value = await Get.find<NestJsConnect>().getProfile();
-      }
-    });
+    _storage = initStorage();
+    ever(accessToken, saveAccessToken);
     ever(profile,
         (Profile? pro) async => _storage.write(profileKey, pro?.toJson()));
     super.onInit();
+  }
+
+  GetStorage initStorage() {
+    return GetStorage();
+  }
+
+  void saveAccessToken(String? token) async {
+    _storage.write(acKey, token);
+      if (token != null) {
+        profile.value = await Get.find<NestJsConnect>().getProfile();
+      }
   }
 
   void updateAccessToken(String? token) {

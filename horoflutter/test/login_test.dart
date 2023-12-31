@@ -7,9 +7,9 @@ import 'package:horoflutter/business_loc/login_user_dto.dart';
 import 'package:horoflutter/business_loc/nestjs_connect.dart';
 import 'package:mockito/mockito.dart';
 
-class MockNestJsConnect extends NestJsConnect with Mock {
+class _MockNestJsConnect extends NestJsConnect with Mock {
   final bool isRespondingOk;
-  MockNestJsConnect({required super.ip, this.isRespondingOk = true});
+  _MockNestJsConnect({required super.ip, this.isRespondingOk = true});
 
   @override
   void handleError(Response res) {}
@@ -46,12 +46,12 @@ class MockNestJsConnect extends NestJsConnect with Mock {
             );
 }
 
-class MockAuthController extends AuthController with Mock {
+class _MockAuthController extends AuthController with Mock {
   @override
-  GetStorage initStorage() => MockGetStorage();
+  GetStorage initStorage() => _MockGetStorage();
 }
 
-class MockGetStorage extends Mock implements GetStorage {
+class _MockGetStorage extends Mock implements GetStorage {
   @override
   Future<void> write(String key, value) => Future<void>.value();
 }
@@ -59,20 +59,19 @@ class MockGetStorage extends Mock implements GetStorage {
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  tearDown(() => Get.reset());
+  final LoginUserDto loginUserDto = LoginUserDto(
+    usernameOrEmail: 'username',
+    password: 'password',
+  );
 
   setUp(() {
     Get.put<NestJsConnect>(NestJsConnect(ip: 'localhost'));
-    Get.put<AuthController>(MockAuthController());
+    Get.put<AuthController>(_MockAuthController());
   });
 
   group('NestjsConnect: login', () {
     test('returns true when the response status is ok', () async {
-      final mockNestJsConnect = MockNestJsConnect(ip: 'localhost');
-      final LoginUserDto loginUserDto = LoginUserDto(
-        usernameOrEmail: 'username',
-        password: 'password',
-      );
+      final mockNestJsConnect = _MockNestJsConnect(ip: 'localhost');
       final result = await mockNestJsConnect.login(loginUserDto);
       expect(Get.find<AuthController>().accessToken.value, 'accessToken');
       expect(result, isTrue);
@@ -80,15 +79,12 @@ void main() {
 
     test('returns false when the response status is not ok', () async {
       final mockNestJsConnect =
-          MockNestJsConnect(ip: 'localhost', isRespondingOk: false);
-      final LoginUserDto loginUserDto = LoginUserDto(
-        usernameOrEmail: 'username',
-        password: 'password',
-      );
-
+          _MockNestJsConnect(ip: 'localhost', isRespondingOk: false);
       final result = await mockNestJsConnect.login(loginUserDto);
       expect(Get.find<AuthController>().accessToken.value, isNull);
       expect(result, isFalse);
     });
   });
+
+  tearDown(() => Get.reset());
 }
