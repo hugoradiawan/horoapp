@@ -10,6 +10,7 @@ import 'package:horoflutter/horo_app.dart';
 import 'package:horoflutter/ui_loc/profile_controller.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:logger/logger.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,7 @@ void main() {
           email = 'test$rnd@test.id',
           username = 'test$rnd',
           password = '112233';
-      print('email: $email');
+      Logger().i('email: $email');
 
       await tester.pumpWidget(const HoroApp());
 

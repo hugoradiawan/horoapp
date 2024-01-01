@@ -8,6 +8,7 @@ import 'package:horoflutter/business_loc/nestjs_connect.dart';
 import 'package:horoflutter/business_loc/profile.dart';
 import 'package:horoflutter/uis/chat/chatroom_page.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class ChatController extends GetxController {
@@ -22,6 +23,7 @@ class ChatController extends GetxController {
   final Rxn<ChatUser> chatter = Rxn<ChatUser>();
   final ImagePicker picker = ImagePicker();
   final RxBool isAttachmentOpen = false.obs;
+  final Logger log = Logger();
 
   late RxList<ChatMessage> messages = RxList<ChatMessage>(
     <ChatMessage>[],
@@ -56,11 +58,11 @@ class ChatController extends GetxController {
 
   void requestList() {
     if (chatter.value == null) {
-      print('chatter is null');
+      log.e('chatter is null');
       return;
     }
     if (roomId == null) {
-      print('roomId is null');
+      log.e('roomId is null');
       return;
     }
     socket.emit('requestList', {
@@ -77,7 +79,7 @@ class ChatController extends GetxController {
   void openRoom(Profile pro) {
     profile.value = pro;
     if (chatter.value?.id == pro.id) {
-      print('same user');
+      log.e('same user');
       return;
     }
     Get.to(() => const ChatRoomPage());
@@ -120,11 +122,11 @@ class ChatController extends GetxController {
   void joinRoom(String roomId) {
     this.roomId = roomId;
     if (chatter.value == null) {
-      print('chatter is null');
+      log.e('chatter is null');
       return;
     }
     if (this.roomId == null) {
-      print('roomId is null');
+      log.e('roomId is null');
       return;
     }
     socket.emit('joinRoom', {
@@ -150,7 +152,7 @@ class ChatController extends GetxController {
         await Get.find<FileUploader>().uploadChatImage(image);
     if (fileName == null) return;
     if (chatter.value == null) {
-      print('chatter is null');
+      log.e('chatter is null');
       return;
     }
     final ChatMessage message = ChatMessage(
@@ -169,20 +171,6 @@ class ChatController extends GetxController {
   }
 
   void sendMessage(ChatMessage message) {
-    print({
-      'roomId': roomId,
-      'user': chatter.toJson(),
-      'text': message.text,
-      'createdAt': DateTime.now().toUtc().toString(),
-      if (message.medias?.isNotEmpty ?? false)
-        'medias': [
-          for (final ChatMedia media in message.medias!)
-            {
-              'fileName': media.fileName,
-              'type': media.type.toString(),
-            }
-        ]
-    });
     socket.emit('sentMessage', {
       'roomId': roomId,
       'user': chatter.toJson(),

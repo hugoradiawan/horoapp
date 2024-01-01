@@ -4,6 +4,7 @@ import 'package:horoflutter/business_loc/auth_controller.dart';
 import 'package:horoflutter/business_loc/nestjs_connect.dart';
 import 'package:horoflutter/business_loc/profile.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 
 class ProfileController extends GetxController {
   final DateFormat dateFormatDash = DateFormat('yyyy-MM-dd');
@@ -15,7 +16,7 @@ class ProfileController extends GetxController {
   void onInit() {
     Future.delayed(const Duration(milliseconds: 500), () {
       if (profile.value?.isEmpty() ?? true) {
-        print('profile is empty');
+        Logger().e('profile is empty');
         reload();
       }
     });
