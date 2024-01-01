@@ -37,6 +37,7 @@ class CustomDropdown extends StatelessWidget {
                     (e) => DropdownMenuItem<String>(
                       alignment: Alignment.centerRight,
                       value: e,
+                      key: Key(e),
                       child: SizedBox(
                         width: Get.width * 0.45,
                         child: Text(
@@ -52,6 +53,4 @@ class CustomDropdown extends StatelessWidget {
           ),
         ),
       );
-
-      
 }

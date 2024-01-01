@@ -29,6 +29,8 @@ class LoginRegisterController extends GetxController {
       usernameError.value = 'Username is required';
     } else if (await Get.find<NestJsConnect>().isUsernameExist(value)) {
       usernameError.value = 'Username already exists';
+    } else if (value.length < 5) {
+      usernameError.value = 'Username must be at least 5 characters';
     } else {
       usernameError.value = null;
       createUserDto.update((val) {
@@ -143,6 +145,7 @@ class LoginRegisterController extends GetxController {
 
   @override
   void dispose() {
+    Get.closeAllSnackbars();
     pg.dispose();
     super.dispose();
   }

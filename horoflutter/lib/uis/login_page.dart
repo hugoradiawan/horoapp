@@ -37,6 +37,7 @@ class LoginPage extends GetView<LoginRegisterController> {
               horizontal: 12,
             ),
             child: TextField(
+              key: const Key('loginUsernameOrEmail'),
               onChanged: (value) {
                 controller.loginUserDto.update((val) {
                   if (val == null) return;
@@ -58,6 +59,7 @@ class LoginPage extends GetView<LoginRegisterController> {
             ),
             child: Obx(
               () => TextField(
+                key: const Key('loginPassword'),
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
                   controller.loginUserDto.update((val) {
@@ -88,6 +90,7 @@ class LoginPage extends GetView<LoginRegisterController> {
               horizontal: 12,
             ),
             child: GlowButton(
+              key: const Key('loginbtn'),
               text: 'Login',
               onPressed: () => controller.login(),
             ),

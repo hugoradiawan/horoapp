@@ -192,7 +192,12 @@ class AboutTile extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(20),
                                   color: Colors.white.withOpacity(0.1),
                                 ),
-                                child: atc.image.value == null
+                                child: atc.image.value == null ||
+                                        Get.find<AuthController>()
+                                                .profile
+                                                .value
+                                                ?.id ==
+                                            null
                                     ? CachedNetworkImage(
                                         fit: BoxFit.cover,
                                         imageUrl: Get.find<NestJsConnect>()
@@ -237,6 +242,7 @@ class AboutTile extends StatelessWidget {
                         const Gap(20),
                         Obx(
                           () => TextButton(
+                            key: const Key('ProfileImage'),
                             onPressed: atc.pickImage,
                             child: Text(
                               "${atc.isFetchImageSucceed.value || atc.image.value != null ? 'Change' : 'add'} Image",
@@ -248,35 +254,42 @@ class AboutTile extends StatelessWidget {
                     ),
                   ),
                   AboutTextField(
+                    key: const Key('displayName'),
                     label: "Display Name",
                     tec: atc.displayNameTec,
                   ),
                   AboutTextField(
+                    key: const Key('gender'),
                     label: "Gender",
                     options: atc.genders,
                   ),
                   AboutTextField(
+                    key: const Key('dob'),
                     label: "Birthday",
                     tec: atc.birthdayTec,
                     isDate: true,
                   ),
                   AboutTextField(
+                    key: const Key('horoscope'),
                     label: "Horoscope",
                     tec: atc.horoscopeTec,
                     isReadOnly: true,
                   ),
                   AboutTextField(
+                    key: const Key('zodiac'),
                     label: "Zodiac",
                     tec: atc.zodiacTec,
                     isReadOnly: true,
                   ),
                   AboutTextField(
+                    key: const Key('height'),
                     label: "Height",
                     isNumberic: true,
                     tec: atc.heightTec,
                     unit: 'cm',
                   ),
                   AboutTextField(
+                    key: const Key('weight'),
                     label: "Weight",
                     isNumberic: true,
                     tec: atc.weightTec,
@@ -299,6 +312,7 @@ class AboutTile extends StatelessWidget {
                     const Spacer(),
                     !atc.isExpanded.value
                         ? IconButton(
+                            key: const Key('ExpandTile'),
                             onPressed: atc.expansionTileController.expand,
                             icon: SvgPicture.asset(
                               'assets/edit.svg',
@@ -309,6 +323,7 @@ class AboutTile extends StatelessWidget {
                             ),
                           )
                         : TextButton(
+                            key: const Key('SaveUpdate'),
                             onPressed: () => atc.saveUpdate(),
                             child: const Text(
                               "Save & Update",
